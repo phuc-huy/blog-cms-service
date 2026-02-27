@@ -26,6 +26,7 @@ module.exports = {
 
     experimental: {
         esmExternals,
+        instrumentationHook: true,
         images: {
             layoutRaw: true
         }
