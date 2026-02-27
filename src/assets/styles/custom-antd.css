@@ -1,0 +1,51 @@
+.ant-alert {
+    padding: 16px;
+}
+
+.ant-carousel .slick-prev,
+.ant-carousel .slick-next {
+    color: black !important;
+}
+
+.ant-carousel .slick-dots li button {
+    background-color: black !important;
+}
+
+.ant-pagination-item {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.ant-menu-light.ant-menu-root.ant-menu-inline {
+    border-inline-end: none !important;
+}
+
+.ant-picker-calendar .ant-picker-panel {
+    border-top: none !important;
+}
+
+.ant-picker-calendar .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+    border: none !important;
+}
+
+.ant-picker-calendar
+    .ant-picker-cell-in-view.ant-picker-cell-selected:not(.ant-picker-cell-disabled)
+    .ant-picker-cell-inner,
+:where(.css-dev-only-do-not-override-1y6tm08).ant-picker-calendar
+    .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-disabled)
+    .ant-picker-cell-inner,
+:where(.css-dev-only-do-not-override-1y6tm08).ant-picker-calendar
+    .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-disabled)
+    .ant-picker-cell-inner {
+    color: black !important;
+    background: transparent !important;
+}
+
+.ant-alert-with-description {
+    padding: 16px !important;
+}
+
+.ant-menu-horizontal {
+    border-bottom: none !important;
+}

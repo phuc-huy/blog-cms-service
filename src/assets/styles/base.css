@@ -1,0 +1,199 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"); */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    min-height: calc(100% + env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+        env(safe-area-inset-left);
+}
+
+:root {
+    font-family: "Roboto", sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light dark;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}
+
+@layer base {
+    body::-webkit-scrollbar {
+        display: none;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #cfcacbc7;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+    }
+
+    body {
+        touch-action: pan-x pan-y;
+    }
+
+    a {
+        color: black;
+        text-decoration-line: none;
+    }
+
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 0 0% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 3.9%;
+        --primary: 0 0% 9%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 0 0% 96.1%;
+        --secondary-foreground: 0 0% 9%;
+        --muted: 0 0% 96.1%;
+        --muted-foreground: 0 0% 45.1%;
+        --accent: 0 0% 96.1%;
+        --accent-foreground: 0 0% 9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 89.8%;
+        --input: 0 0% 89.8%;
+        --ring: 0 0% 3.9%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.5rem;
+    }
+    .dark {
+        --background: 0 0% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 0 0% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 0 0% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 0 0% 9%;
+        --secondary: 0 0% 14.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 0 0% 14.9%;
+        --muted-foreground: 0 0% 63.9%;
+        --accent: 0 0% 14.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 14.9%;
+        --input: 0 0% 14.9%;
+        --ring: 0 0% 83.1%;
+        --chart-1: 220 70% 50%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+@layer components {
+    .component-section-homepage {
+        @apply mx-auto max-w-[1280px] px-2 tablet:px-4;
+    }
+
+    .component-height-header {
+        @apply h-[60px] tablet:h-[64px];
+    }
+
+    .component-box {
+        @apply rounded-xl p-3 laptop:p-4 h-fit bg-white border-border border-[1px] border-solid hover:border-primary hover:util-shadow-secondary cursor-pointer relative;
+    }
+
+    .component-box-none-border {
+        @apply rounded-xl p-3 laptop:p-4 h-fit bg-white border-border border-[1px] border-solid border-transparent relative shadow-sm;
+    }
+
+    .component-grid-system {
+        @apply grid grid-cols-2 tablet:grid-cols-3 laptop:grid-cols-4 extra:grid-cols-5 gap-1 tablet:gap-3 laptop:gap-4;
+    }
+
+    .component-grid-system-category {
+        @apply grid tablet:grid-cols-2 laptop:grid-cols-3 extra:grid-cols-4 gap-2 tablet:gap-4;
+    }
+
+    .component-text-label {
+        @apply text-[14px] dark:text-white mb-2;
+    }
+
+    .component-text-title {
+        @apply text-xs laptop:text-base font-medium break-words group-hover:text-primary;
+    }
+
+    .component-text-title2 {
+        @apply text-base tablet:text-lg font-medium break-words;
+    }
+}
+
+@layer utilities {
+    .util-flex-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .util-flex-col-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .util-shadow-secondary {
+        box-shadow: 0px 0px 40px -25px rgba(94, 195, 101, 1);
+        -webkit-box-shadow: 0px 0px 40px -25px rgba(94, 195, 101, 1);
+        -moz-box-shadow: 0px 0px 40px -25px rgba(94, 195, 101, 1);
+    }
+}
+
+/* Keyframes cho hiệu ứng chạy ngang */
+@keyframes clientLogosMarquee {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(
+            -50%
+        ); /* Di chuyển một nửa tổng chiều rộng (do danh sách đã nhân đôi) */
+    }
+}
+
+/* Class để áp dụng animation cho dải logo */
+.animate-client-logos-scroll {
+    display: flex; /* Bắt buộc để các item nằm trên một hàng */
+    /* white-space: nowrap; Tailwind đã có class này, nhưng thêm ở đây để chắc chắn */
+    animation-name: clientLogosMarquee;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    /* Thời gian chạy animation. 
+    Ví dụ: 35 logo, mỗi logo + margin khoảng 250px. 
+    Tổng chiều dài một bộ logo: 35 * 250px = 8750px.
+    Nếu muốn tốc độ khoảng 30px/giây: 8750px / 30px/s ≈ 291 giây.
+    Bạn có thể cần tăng/giảm giá trị này để đạt tốc độ mong muốn và đảm bảo chạy hết logo.
+    Giá trị càng lớn, chạy càng chậm.
+  */
+    animation-duration: 20s; /* << THỬ VỚI GIÁ TRỊ NÀY TRƯỚC. TĂNG NẾU LẶP QUÁ SỚM, GIẢM NẾU QUÁ CHẬM */
+}

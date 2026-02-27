@@ -1,0 +1,40 @@
+.bgContained1Button {
+    color: white;
+    background: var(--color-primary);
+    box-shadow: 0px 6px 12px #f0256b3d;
+
+    &:hover {
+        background: var(--color-primary--light);
+    }
+
+    &:active {
+        background: var(--color-primary--dark);
+    }
+}
+
+.bgOutlined1Button {
+    color: var(--color-primary);
+    background: #ffffff 0% 0% no-repeat padding-box;
+    border: 1px solid var(--color-primary--dark);
+
+    &:hover {
+        background: #fdf2f5 0% 0% no-repeat padding-box;
+    }
+
+    &:active {
+        background: #f7d8e0 0% 0% no-repeat padding-box;
+    }
+}
+
+.bgGhost1Button {
+    color: var(--color-primary);
+    background: #21212100 0% 0% no-repeat padding-box;
+
+    &:hover {
+        background: #d327550f 0% 0% no-repeat padding-box;
+    }
+
+    &:active {
+        background: #d327552e 0% 0% no-repeat padding-box;
+    }
+}
