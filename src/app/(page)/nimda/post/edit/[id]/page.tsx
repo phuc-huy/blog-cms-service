@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import dynamic from "next/dynamic"
 import { Save, Loader2, Trash2 } from "lucide-react"
 import { useRouter, useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -27,7 +26,28 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@/components/ui/select"
 import RichTextEditor from "@/components/ui/rich-text-editor"
+
+interface CategoryOption {
+    _id: string
+    name: string
+    slug: string
+}
+
+interface DomainOption {
+    _id: string
+    name: string
+    key: string
+    link?: string
+}
 
 export default function EditPostPage() {
     const router = useRouter()
@@ -39,6 +59,9 @@ export default function EditPostPage() {
         description: "",
         content_html: ""
     })
+    const [categoryId, setCategoryId] = useState<string>("")
+    const [selectedDomainIds, setSelectedDomainIds] = useState<string[]>([])
+    const [status, setStatus] = useState<string>("draft")
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
@@ -46,13 +69,41 @@ export default function EditPostPage() {
     const [error, setError] = useState<string | null>(null)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
+    // Dropdown options
+    const [categories, setCategories] = useState<CategoryOption[]>([])
+    const [domains, setDomains] = useState<DomainOption[]>([])
+
+    // Fetch categories and domains on mount
+    useEffect(() => {
+        const fetchOptions = async () => {
+            try {
+                const [categoryRes, domainRes] = await Promise.all([
+                    fetch("/api/nimda/category"),
+                    fetch("/api/nimda/domain")
+                ])
+                if (categoryRes.ok) {
+                    const categoryData = await categoryRes.json()
+                    setCategories(categoryData)
+                }
+                if (domainRes.ok) {
+                    const domainData = await domainRes.json()
+                    setDomains(domainData)
+                }
+            } catch {
+                // Silently fail - dropdowns will just be empty
+            }
+        }
+        fetchOptions()
+    }, [])
+
+    // Fetch post data
     useEffect(() => {
         if (!id) return
 
         const fetchPost = async () => {
             try {
                 setIsLoading(true)
-                const res = await fetch(`/api/post/${id}`)
+                const res = await fetch(`/api/nimda/post/${id}`)
                 if (!res.ok) {
                     throw new Error("Không tìm thấy bài viết.")
                 }
@@ -63,6 +114,24 @@ export default function EditPostPage() {
                     content_html: postData.content_html
                 })
                 setPreviewUrl(postData.thumbnail_url)
+                // Pre-select category
+                if (postData.category_id) {
+                    const catId = typeof postData.category_id === 'object'
+                        ? postData.category_id._id
+                        : postData.category_id
+                    setCategoryId(catId || "")
+                }
+                // Pre-check domains
+                if (postData.domain_ids && Array.isArray(postData.domain_ids)) {
+                    const domainIds = postData.domain_ids.map((d: any) =>
+                        typeof d === 'object' ? d._id : d
+                    )
+                    setSelectedDomainIds(domainIds)
+                }
+                // Pre-select status
+                if (postData.status) {
+                    setStatus(postData.status)
+                }
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Đã có lỗi xảy ra.")
             } finally {
@@ -91,6 +160,12 @@ export default function EditPostPage() {
         }
     }
 
+    const handleDomainToggle = (domainId: string, checked: boolean) => {
+        setSelectedDomainIds((prev) =>
+            checked ? [...prev, domainId] : prev.filter((id) => id !== domainId)
+        )
+    }
+
     const handleSubmit = async () => {
         setIsSubmitting(true)
         setError(null)
@@ -113,7 +188,6 @@ export default function EditPostPage() {
             return
         }
 
-
         try {
             let finalThumbnailUrl = previewUrl
 
@@ -132,7 +206,13 @@ export default function EditPostPage() {
             const res = await fetch(`/api/nimda/post/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...formData, thumbnail_url: finalThumbnailUrl })
+                body: JSON.stringify({
+                    ...formData,
+                    thumbnail_url: finalThumbnailUrl,
+                    domain_ids: selectedDomainIds,
+                    category_id: categoryId || null,
+                    status: status
+                })
             })
 
             if (!res.ok) {
@@ -261,6 +341,60 @@ export default function EditPostPage() {
                                     </p>
                                 )}
                             </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="category">Danh mục</Label>
+                                <Select value={categoryId} onValueChange={(value) => setCategoryId(value === "none" ? "" : value)}>
+                                    <SelectTrigger id="category">
+                                        <SelectValue placeholder="Chọn danh mục (tùy chọn)" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="none">Không chọn</SelectItem>
+                                        {categories.map((cat) => (
+                                            <SelectItem key={cat._id} value={cat._id}>
+                                                {cat.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Website</Label>
+                                {domains.length > 0 ? (
+                                    <div className="space-y-2">
+                                        {domains.map((domain) => (
+                                            <div key={domain._id} className="flex items-center space-x-2">
+                                                <Checkbox
+                                                    id={`domain-${domain._id}`}
+                                                    checked={selectedDomainIds.includes(domain._id)}
+                                                    onCheckedChange={(checked) =>
+                                                        handleDomainToggle(domain._id, checked === true)
+                                                    }
+                                                />
+                                                <Label
+                                                    htmlFor={`domain-${domain._id}`}
+                                                    className="text-sm font-normal cursor-pointer"
+                                                >
+                                                    {domain.name} ({domain.key})
+                                                </Label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-muted-foreground">Chưa có website nào.</p>
+                                )}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="status">Trạng thái</Label>
+                                <Select value={status} onValueChange={setStatus}>
+                                    <SelectTrigger id="status">
+                                        <SelectValue placeholder="Chọn trạng thái" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="draft">Nháp</SelectItem>
+                                        <SelectItem value="published">Đã xuất bản</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                             {error && <p className="text-sm text-destructive">{error}</p>}
                         </CardContent>
                         <CardFooter className="flex justify-between">
@@ -294,7 +428,7 @@ export default function EditPostPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Bạn có chắc chắn muốn xóa?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Bài viết "{formData.title}" sẽ bị xóa vĩnh viễn. Hành động này không thể
+                            Bài viết &quot;{formData.title}&quot; sẽ bị xóa vĩnh viễn. Hành động này không thể
                             hoàn tác.
                         </AlertDialogDescription>
                     </AlertDialogHeader>

@@ -19,7 +19,8 @@ const navLinks = [
     { name: "Khách liên hệ", href: "/nimda/customer-contact" },
     { name: "Dự án", href: "/nimda/project" },
     { name: "Bài viết", href: "/nimda/post" },
-    { name: "Danh mục dự án", href: "/nimda/category" },
+    { name: "Website", href: "/nimda/domain" },
+    { name: "Danh mục", href: "/nimda/category" },
     { name: "Khách phản hồi", href: "/nimda/customer-feedback" },
     // { name: "Cấu hình", href: "/nimda/config-system" }
 ]

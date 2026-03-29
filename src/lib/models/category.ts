@@ -1,33 +1,33 @@
 import mongoose, { Document, Schema } from "mongoose"
 
-export interface IDomain extends Document {
+export interface ICategory extends Document {
     name: string
-    key: string
-    link: string
+    slug: string
+    description: string
     createdAt: Date
     updatedAt: Date
 }
 
-const DomainSchema: Schema = new Schema(
+const CategorySchema: Schema = new Schema(
     {
         name: {
             type: String,
             required: [true, "Please provide"],
             trim: true
         },
-        key: {
+        slug: {
             type: String,
             required: [true, "Please provide"],
             unique: true,
             trim: true
         },
-        link: {
+        description: {
             type: String,
-            required: [true, "Please provide"],
+            default: '',
             trim: true
         },
     },
     { timestamps: true }
 )
 
-export default mongoose.models.Domain || mongoose.model<IDomain>("Domain", DomainSchema)
+export default mongoose.models.Category || mongoose.model<ICategory>("Category", CategorySchema)

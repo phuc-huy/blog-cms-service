@@ -30,3 +30,14 @@ export async function cacheSet(
 export async function cacheDel(key: string): Promise<number> {
   return redis.del(key);
 }
+
+/**
+ * Delete all Redis keys matching a glob pattern (e.g. "posts:*").
+ * Uses KEYS + DEL — fine for moderate key counts typical in this app.
+ * Returns the number of keys deleted.
+ */
+export async function cacheDelPattern(pattern: string): Promise<number> {
+  const keys = await redis.keys(pattern);
+  if (keys.length === 0) return 0;
+  return redis.del(keys);
+}
